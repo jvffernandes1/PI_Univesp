@@ -1,0 +1,101 @@
+/* Configurações gerais */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #fff5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+/* Cabeçalho */
+header {
+    background-color: #b22222;
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+/* Navegação */
+nav {
+    margin-top: 10px;
+}
+
+nav a {
+    color: white;
+    margin: 0 15px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Seções */
+main {
+    max-width: 900px;
+    margin: 40px auto;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+/* Títulos e parágrafos */
+h2 {
+    color: #b22222;
+    font-size: 26px;
+    margin-bottom: 15px;
+}
+
+p {
+    font-size: 18px;
+    line-height: 1.6;
+}
+
+/* Lista */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    font-size: 18px;
+    background: #ffecec;
+    padding: 10px;
+    margin: 5px 0;
+    border-left: 5px solid #b22222;
+    border-radius: 5px;
+}
+
+/* Botão de ação */
+.call-to-action a {
+    display: inline-block;
+    background-color: #b22222;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background 0.3s;
+}
+
+.call-to-action a:hover {
+    background-color: #8b1a1a;
+}
+
+/* Rodapé */
+footer {
+    background-color: #b22222;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 40px;
+    font-size: 16px;
+}

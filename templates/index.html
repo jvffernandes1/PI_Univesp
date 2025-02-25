@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartFood - Avaliações de Restaurantes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <header>
+        <h1>Bem-vindo ao SmartFood!</h1>
+        <nav>
+            <a href="{{ url_for('home') }}">Início</a>
+            {% if current_user.is_authenticated %}
+                <a href="{{ url_for('logout') }}">Logout</a>
+                <a href="{{ url_for('admin_panel') }}">Painel de controle</a>
+            {% else %}
+                <a href="{{ url_for('login') }}">Login</a>
+                <a href="{{ url_for('register') }}">Cadastro</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        <section class="intro">
+            <h2>Descubra e avalie os melhores restaurantes da Baixada Santista!</h2>
+            <p>O <strong>SmartFood</strong> é uma plataforma criada para ajudar você a encontrar os melhores restaurantes da região. Aqui, você pode:</p>
+            <ul>
+                <li>Explorar uma lista de restaurantes cadastrados com informações detalhadas;</li>
+                <li>Ver avaliações de outros usuários sobre cada estabelecimento;</li>
+                <li>Deixar sua opinião sobre os lugares que visitou;</li>
+                <li>Votar nos seus restaurantes favoritos!</li>
+            </ul>
+        </section>
+
+        <section class="how-it-works">
+            <h2>Como funciona?</h2>
+            <p>Os administradores adicionam novos restaurantes com informações como:</p>
+            <ul>
+                <li>Nome do estabelecimento;</li>
+                <li>Endereço e localização;</li>
+                <li>Preço médio por refeição;</li>
+                <li>Descrição e fotos.</li>
+            </ul>
+            <p>Os usuários podem acessar esses dados, deixar comentários e votar nos seus favoritos, ajudando outras pessoas a encontrarem os melhores lugares para comer.</p>
+        </section>
+
+        <section class="call-to-action">
+            {% if not current_user.is_authenticated %}
+                <p><strong>Junte-se à nossa comunidade!</strong> <a href="{{ url_for('register') }}">Cadastre-se agora</a> para começar a avaliar restaurantes.</p>
+            {% else %}
+                <p><strong>Comece agora!</strong> Explore os restaurantes disponíveis e deixe suas avaliações.</p>
+            {% endif %}
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 SmartFood - Sua plataforma de avaliações da Baixada Santista.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h2>Cadastro</h2>
+        <form method="POST">
+            <input type="text" name="name" placeholder="Nome" required>
+            <input type="email" name="email" placeholder="Email" required>
+            <input type="password" name="password" placeholder="Senha" required>
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p>Já tem uma conta? <a href="{{ url_for('login') }}">Faça login</a></p>
+    </div>
+</body>
+</html>
