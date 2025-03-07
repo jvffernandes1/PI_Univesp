@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Restaurante{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Editar Restaurante</h2>
+    <form method="POST">
+        <div class="form-group">
+            <label for="name">Nome do Restaurante:</label>
+            <input type="text" id="name" name="name" value="{{ restaurante.name }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Endereço:</label>
+            <input type="text" id="address" name="address" value="{{ restaurante.address }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="price_range">Faixa de Preço:</label>
+            <select id="price_range" name="price_range" required>
+                <option value="$" {% if restaurante.price_range == '$' %}selected{% endif %}>$ (Econômico)</option>
+                <option value="$$" {% if restaurante.price_range == '$$' %}selected{% endif %}>$$ (Médio)</option>
+                <option value="$$$" {% if restaurante.price_range == '$$$' %}selected{% endif %}>$$$ (Caro)</option>
+                <option value="$$$$" {% if restaurante.price_range == '$$$$' %}selected{% endif %}>$$$$ (Luxuoso)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Categoria:</label>
+            <input type="text" id="category" name="category" value="{{ restaurante.category }}" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="website">Website:</label>
+            <input type="url" id="website" name="website" value="{{ restaurante.website }}">
+        </div>
+        
+        <button type="submit" class="btn-submit">Salvar Alterações</button>
+    </form>
+    <a href="{{ url_for('restaurantes') }}" class="btn-cancel">Cancelar</a>
+</div>
+{% endblock %} 

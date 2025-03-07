@@ -1,28 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Painel de Controle</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
+{% extends "base.html" %}
+
+{% block title %}Painel de Controle{% endblock %}
+
+{% block content %}
+<div class="admin-panel">
     <h2>Painel de Controle</h2>
-    <h3>Lista de usuários:</h3>
-    <ul>
-        {% for user in users %}
-        <li>{{ user.name }} - {{ user.email }}
-            {% if not user.is_admin %}
-            <a href="{{ url_for('promote_user', user_id=user._id) }}">Promover a Admin</a>
-            {% else %}
-                {% if user._id != current_user.id %}
-                <a href="{{ url_for('remove_admin', user_id=user._id) }}">Remover Admin</a>
+    
+    <section class="users-section">
+        <h3>Lista de usuários:</h3>
+        <ul class="users-list">
+            {% for user in users %}
+            <li>
+                {{ user.name }} - {{ user.email }}
+                {% if not user.is_admin %}
+                <a href="{{ url_for('promote_user', user_id=user._id) }}" class="action-btn promote-btn">Promover a Admin</a>
+                {% else %}
+                    {% if user._id != current_user.id and not loop.first %}
+                    <a href="{{ url_for('remove_admin', user_id=user._id) }}" class="action-btn remove-btn">Remover Admin</a>
+                    {% endif %}
                 {% endif %}
-            {% endif %}
-        </li>
-        {% endfor %}
-    </ul>
-    <hr>
-    <a href="{{ url_for('add_restaurant') }}">Adicionar novos restaurantes</a>
-</body>
-</html>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="restaurants-section">
+        <h3>Gerenciar Restaurantes</h3>
+        <a href="{{ url_for('add_restaurant') }}" class="action-btn add-btn">Adicionar Novo Restaurante</a>
+        
+        <div class="restaurants-list">
+            {% for restaurante in restaurantes %}
+            <div class="restaurant-item">
+                <div class="restaurant-info">
+                    <h4>{{ restaurante.name }}</h4>
+                    <p>{{ restaurante.address }}</p>
+                    <p>Faixa de Preço: {{ restaurante.price_range }}</p>
+                    <p>Categoria: {{ restaurante.category }}</p>
+                </div>
+                <div class="restaurant-actions">
+                    <a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}" class="action-btn edit-btn">Editar</a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

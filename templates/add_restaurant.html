@@ -1,34 +1,43 @@
-<!DOCTYPE html>
-<html lang="pt">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cadastrar Restaurante</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
-</head>
-<body>
-    <h2>Cadastrar Restaurante</h2>
+{% extends "base.html" %}
+
+{% block title %}Adicionar Restaurante{% endblock %}
+
+{% block content %}
+<div class="form-container">
+    <h2>Adicionar Novo Restaurante</h2>
     <form method="POST">
-        <label>Nome:</label>
-        <input type="text" name="name" required><br>
-
-        <label>Endereço:</label>
-        <input type="text" name="address" required><br>
-
-        <label>Faixa de preço:</label>
-        <select name="price_range">
-            <option value="Barato">Barato</option>
-            <option value="Médio">Médio</option>
-            <option value="Caro">Caro</option>
-        </select><br>
-
-        <label>Categoria:</label>
-        <input type="text" name="category" required><br>
-
-        <label>Website ou Instagram:</label>
-        <input type="text" name="website"><br>
-
-        <button type="submit">Cadastrar</button>
+        <div class="form-group">
+            <label for="name">Nome do Restaurante:</label>
+            <input type="text" id="name" name="name" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="address">Endereço:</label>
+            <input type="text" id="address" name="address" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="price_range">Faixa de Preço:</label>
+            <select id="price_range" name="price_range" required>
+                <option value="$">$ (Econômico)</option>
+                <option value="$$">$$ (Médio)</option>
+                <option value="$$$">$$$ (Caro)</option>
+                <option value="$$$$">$$$$ (Luxuoso)</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="category">Categoria:</label>
+            <input type="text" id="category" name="category" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="website">Website:</label>
+            <input type="url" id="website" name="website">
+        </div>
+        
+        <button type="submit" class="btn-submit">Adicionar Restaurante</button>
     </form>
-</body>
-</html>
+    <a href="{{ url_for('restaurantes') }}" class="btn-cancel">Cancelar</a>
+</div>
+{% endblock %}
