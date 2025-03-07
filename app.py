@@ -165,7 +165,8 @@ def add_restaurant():
             'address': address,
             'price_range': price_range,
             'category': category,
-            'website': website
+            'website': website,
+            'exclude': False
         })
 
         flash('Restaurante cadastrado com sucesso!', 'success')
@@ -248,6 +249,7 @@ def editar_restaurante(restaurant_id):
         price_range = request.form['price_range']
         category = request.form['category']
         website = request.form['website']
+        exclude = request.form['exclude']
 
         db.restaurants.update_one(
             {'_id': ObjectId(restaurant_id)},
@@ -256,7 +258,8 @@ def editar_restaurante(restaurant_id):
                 'address': address,
                 'price_range': price_range,
                 'category': category,
-                'website': website
+                'website': website,
+                'exclude': bool(exclude)
             }}
         )
 

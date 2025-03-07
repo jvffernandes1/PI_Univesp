@@ -12,37 +12,39 @@
 
 <div class="restaurant-grid">
     {% for restaurante in restaurantes %}
-    <div class="restaurant-card">
-        {% if current_user.is_admin %}
-        <a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}" class="edit-btn">Editar</a>
-        {% endif %}
-        <h2 class="restaurant-name">{{ restaurante.name }}</h2>
-        <p class="restaurant-info">{{ restaurante.address }}</p>
-        <p class="restaurant-price">Faixa de Preço: {{ restaurante.price_range }}</p>
-        <p class="restaurant-category">{{ restaurante.category }}</p>
-        <a href="{{ restaurante.website }}" target="_blank" class="restaurant-website">Visitar Website</a>
-        
-        <div class="rating-container">
-            <div class="rating-stars">
-                {% for i in range(5) %}
-                    {% if i < restaurante.media_avaliacoes|round|int %}
-                        ★
-                    {% else %}
-                        ☆
-                    {% endif %}
-                {% endfor %}
-            </div>
-            <span class="rating-count">({{ restaurante.total_avaliacoes }} avaliações)</span>
-        </div>
+        {% if restaurante.exclude != true %}
+            <div class="restaurant-card">
+                {% if current_user.is_admin %}
+                <a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}" class="edit-btn">Editar</a>
+                {% endif %}
+                <h2 class="restaurant-name">{{ restaurante.name }}</h2>
+                <p class="restaurant-info">{{ restaurante.address }}</p>
+                <p class="restaurant-price">Faixa de Preço: {{ restaurante.price_range }}</p>
+                <p class="restaurant-category">{{ restaurante.category }}</p><br>
+                <a href="{{ restaurante.website }}" target="_blank" class="restaurant-website">Visitar Website</a>
 
-        <form action="{{ url_for('avaliar_restaurante', restaurant_id=restaurante._id) }}" method="POST" class="rating-form">
-            <input type="hidden" name="rating" id="rating-{{ restaurante._id }}" value="0">
-            {% for i in range(5) %}
-            <button type="button" class="star-btn" data-restaurant="{{ restaurante._id }}" data-rating="{{ i + 1 }}">☆</button>
-            {% endfor %}
-            <button type="submit">Avaliar</button>
-        </form>
-    </div>
+                <div class="rating-container">
+                    <div class="rating-stars">
+                        {% for i in range(5) %}
+                            {% if i < restaurante.media_avaliacoes|round|int %}
+                                ★
+                            {% else %}
+                                ☆
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <span class="rating-count">({{ restaurante.total_avaliacoes }} avaliações)</span>
+                </div>
+
+                <form action="{{ url_for('avaliar_restaurante', restaurant_id=restaurante._id) }}" method="POST" class="rating-form">
+                    <input type="hidden" name="rating" id="rating-{{ restaurante._id }}" value="0">
+                    {% for i in range(5) %}
+                    <button type="button" class="star-btn" data-restaurant="{{ restaurante._id }}" data-rating="{{ i + 1 }}">☆</button>
+                    {% endfor %}
+                    <button type="submit">Avaliar</button>
+                </form>
+            </div>
+        {% endif %}
     {% endfor %}
 </div>
 {% endblock %}

@@ -36,9 +36,8 @@
                     <p>{{ restaurante.address }}</p>
                     <p>Faixa de Preço: {{ restaurante.price_range }}</p>
                     <p>Categoria: {{ restaurante.category }}</p>
-                </div>
-                <div class="restaurant-actions">
-                    <a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}" class="action-btn edit-btn">Editar</a>
+                    <p>Oculto: {{ restaurante.exclude }}</p>
+                    <p><a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}">Editar</a></p>
                 </div>
             </div>
             {% endfor %}

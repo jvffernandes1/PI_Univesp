@@ -356,7 +356,6 @@ footer {
 
 /* Estilos do painel de administração */
 .admin-panel {
-    max-width: 800px;
     margin: 0 auto;
     padding: 20px;
 }
@@ -455,4 +454,8 @@ footer {
 
 .edit-btn:hover {
     background: #d35400;
+}
+
+.container {
+    margin:2%;
 }
