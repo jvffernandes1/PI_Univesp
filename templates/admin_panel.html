@@ -14,6 +14,10 @@
         <li>{{ user.name }} - {{ user.email }}
             {% if not user.is_admin %}
             <a href="{{ url_for('promote_user', user_id=user._id) }}">Promover a Admin</a>
+            {% else %}
+                {% if user._id != current_user.id %}
+                <a href="{{ url_for('remove_admin', user_id=user._id) }}">Remover Admin</a>
+                {% endif %}
             {% endif %}
         </li>
         {% endfor %}

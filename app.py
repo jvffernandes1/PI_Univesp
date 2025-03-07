@@ -36,7 +36,6 @@ def load_user(user_id):
     return None
 
 
-
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -89,6 +88,22 @@ def promote_user(user_id):
 
     db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'is_admin': True}})
     flash('Usuário promovido a administrador!', 'success')
+    return redirect(url_for('admin_panel'))
+
+@app.route('/remove_admin/<user_id>')
+@login_required
+def remove_admin(user_id):
+    if not current_user.is_admin:
+        flash('Acesso negado!', 'danger')
+        return redirect(url_for('home'))
+
+    # Não permite remover o próprio status de admin
+    if user_id == current_user.id:
+        flash('Você não pode remover seu próprio status de administrador!', 'danger')
+        return redirect(url_for('admin_panel'))
+    
+    db.users.update_one({'_id': ObjectId(user_id)}, {'$set': {'is_admin': False}})
+    flash('Status de administrador removido com sucesso!', 'success')
     return redirect(url_for('admin_panel'))
 
 
