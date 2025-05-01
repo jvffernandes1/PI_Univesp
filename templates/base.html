@@ -11,7 +11,10 @@
 <body>
     <header>
         <h1>Bem-vindo ao SmartFood!</h1>
-        <h5 style="color: #FF6961">Encontre os melhores restaurantes da baixada santista!</h5>
+        {% if current_user.is_authenticated %}
+            <h5>Seja bem-vindo, {{ current_user.name }}!</h5>
+        {% endif %}
+        <h4 style="color: #ffa4a0">Encontre os melhores restaurantes da baixada santista!</h4>
         <nav>
             <a href="{{ url_for('home') }}">Início</a>
             <a href="{{ url_for('restaurantes') }}">Restaurantes</a>

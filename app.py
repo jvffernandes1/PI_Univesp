@@ -38,10 +38,8 @@ def load_user(user_id):
 
 @app.route('/restaurantes')
 def restaurantes():
-    # Busca todos os restaurantes no banco de dados
     restaurantes = list(db.restaurants.find())
-    
-    # Para cada restaurante, calcula a média das avaliações
+
     for restaurante in restaurantes:
         avaliacoes = list(db.ratings.find({'restaurant_id': restaurante['_id']}))
         if avaliacoes:
@@ -51,16 +49,16 @@ def restaurantes():
         else:
             restaurante['media_avaliacoes'] = 0
             restaurante['total_avaliacoes'] = 0
-            
-        # Verifica se o usuário atual já avaliou este restaurante
+
         if current_user.is_authenticated:
             avaliacao_usuario = db.ratings.find_one({
                 'restaurant_id': restaurante['_id'],
                 'user_id': ObjectId(current_user.id)
             })
             restaurante['avaliacao_usuario'] = avaliacao_usuario['rating'] if avaliacao_usuario else None
-    
+
     return render_template('restaurantes.html', restaurantes=restaurantes)
+
 
 @app.route('/')
 def home():
@@ -198,38 +196,44 @@ def logout():
     logout_user()
     return redirect(url_for('home'))
 
+
 @app.route('/avaliar/<restaurant_id>', methods=['POST'])
 @login_required
 def avaliar_restaurante(restaurant_id):
     rating = int(request.form.get('rating'))
+    comentario = request.form.get('comentario', '').strip()
+
     if not 1 <= rating <= 5:
         flash('Avaliação deve ser entre 1 e 5!', 'danger')
         return redirect(url_for('restaurantes'))
-    
-    # Verifica se o usuário já avaliou este restaurante
+
     avaliacao_existente = db.ratings.find_one({
         'restaurant_id': ObjectId(restaurant_id),
         'user_id': ObjectId(current_user.id)
     })
-    
+
     if avaliacao_existente:
-        # Atualiza a avaliação existente
         db.ratings.update_one(
             {'_id': avaliacao_existente['_id']},
-            {'$set': {'rating': rating, 'updated_at': datetime.utcnow()}}
+            {'$set': {
+                'rating': rating,
+                'comentario': comentario,
+                'updated_at': datetime.utcnow()
+            }}
         )
     else:
-        # Cria uma nova avaliação
         db.ratings.insert_one({
             'restaurant_id': ObjectId(restaurant_id),
             'user_id': ObjectId(current_user.id),
             'rating': rating,
+            'comentario': comentario,
             'created_at': datetime.utcnow(),
             'updated_at': datetime.utcnow()
         })
-    
+
     flash('Avaliação registrada com sucesso!', 'success')
     return redirect(url_for('restaurantes'))
+
 
 @app.route('/editar_restaurante/<restaurant_id>', methods=['GET', 'POST'])
 @login_required
