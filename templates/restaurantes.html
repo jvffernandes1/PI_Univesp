@@ -10,6 +10,26 @@
     {% endif %}
 </div>
 
+<form method="get" action="{{ url_for('restaurantes') }}" class="filter-form">
+    <input type="text" name="search" placeholder="Buscar por nome..." value="{{ request.args.get('search', '') }}">
+
+    <select name="price_range">
+        <option value="">Todas as faixas</option>
+        <option value="$">Barato ($)</option>
+        <option value="$$">Médio ($$)</option>
+        <option value="$$$">Caro ($$$)</option>
+    </select>
+
+    <select name="category">
+        <option value="">Todas as categorias</option>
+        {% for cat in categorias_unicas %}
+            <option value="{{ cat }}" {% if request.args.get('category') == cat %}selected{% endif %}>{{ cat }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Filtrar</button>
+</form>
+
 <div class="restaurant-grid">
     {% for restaurante in restaurantes %}
         {% if restaurante.exclude != true %}
@@ -17,7 +37,9 @@
                 {% if current_user.is_admin %}
                 <a href="{{ url_for('editar_restaurante', restaurant_id=restaurante._id) }}" class="edit-btn">Editar</a>
                 {% endif %}
-                <h2 class="restaurant-name">{{ restaurante.name }}</h2>
+                <h2 class="restaurant-name">
+                    <a href="{{ url_for('ver_restaurante', restaurant_id=restaurante._id) }}">{{ restaurante.name }}</a>
+                </h2>
                 <p class="restaurant-info">{{ restaurante.address }}</p>
                 <p class="restaurant-price">Faixa de Preço: {{ restaurante.price_range }}</p>
                 <p class="restaurant-category">{{ restaurante.category }}</p><br>

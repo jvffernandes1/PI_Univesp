@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}{{ restaurante.name }}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>{{ restaurante.name }}</h2>
+    <p><strong>Endereço:</strong> {{ restaurante.address }}</p>
+    <p><strong>Categoria:</strong> {{ restaurante.category }}</p>
+    <p><strong>Faixa de Preço:</strong> {{ restaurante.price_range }}</p>
+    <p><strong>Website:</strong> <a href="{{ restaurante.website }}" target="_blank">{{ restaurante.website }}</a></p>
+
+    <div class="rating-container">
+            <div class="rating-stars">
+                {% for i in range(5) %}
+                    {% if i < restaurante.media_avaliacoes|round|int %}
+                        ★
+                    {% else %}
+                        ☆
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <span class="rating-count">({{ restaurante.total_avaliacoes }} avaliações)</span>
+        </div>
+
+    {% if avaliacoes %}
+        <h3>Comentários:</h3>
+        <ul>
+            {% for comentario in avaliacoes %}
+                <li><strong>{{ comentario.usuario }}:</strong> {{ comentario.comentario }}</li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Nenhum comentário ainda.</p>
+    {% endif %}
+
+    <a href="{{ url_for('restaurantes') }}" class="btn-cancel">Voltar</a>
+</div>
+{% endblock %}

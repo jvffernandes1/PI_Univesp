@@ -40,26 +40,40 @@ def load_user(user_id):
 
 @app.route('/restaurantes')
 def restaurantes():
-    restaurantes = list(db.restaurants.find())
+    search = request.args.get('search', '').strip()
+    price_range = request.args.get('price_range')
+    category = request.args.get('category')
 
+    filtro = {'exclude': {'$ne': True}}
+
+    if search:
+        filtro['name'] = {'$regex': search, '$options': 'i'}  # Busca insensível a maiúsculas
+
+    if price_range:
+        filtro['price_range'] = price_range
+
+    if category:
+        filtro['category'] = category
+
+    restaurantes = list(db.restaurants.find(filtro))
+
+    # Calcular média e total de avaliações, etc.
     for restaurante in restaurantes:
         avaliacoes = list(db.ratings.find({'restaurant_id': restaurante['_id']}))
         if avaliacoes:
-            media = sum(av['rating'] for av in avaliacoes) / len(avaliacoes)
-            restaurante['media_avaliacoes'] = round(media, 1)
-            restaurante['total_avaliacoes'] = len(avaliacoes)
+            total = len(avaliacoes)
+            media = sum([int(a['rating']) for a in avaliacoes]) / total
+            restaurante['media_avaliacoes'] = media
+            restaurante['total_avaliacoes'] = total
         else:
             restaurante['media_avaliacoes'] = 0
             restaurante['total_avaliacoes'] = 0
 
-        if current_user.is_authenticated:
-            avaliacao_usuario = db.ratings.find_one({
-                'restaurant_id': restaurante['_id'],
-                'user_id': ObjectId(current_user.id)
-            })
-            restaurante['avaliacao_usuario'] = avaliacao_usuario['rating'] if avaliacao_usuario else None
+    # Pegando categorias únicas para popular o select
+    categorias_unicas = db.restaurants.distinct('category')
 
-    return render_template('restaurantes.html', restaurantes=restaurantes)
+    return render_template('restaurantes.html', restaurantes=restaurantes, categorias_unicas=categorias_unicas)
+
 
 
 @app.route('/')
@@ -276,6 +290,29 @@ def editar_restaurante(restaurant_id):
         return redirect(url_for('restaurantes'))
 
     return render_template('editar_restaurante.html', restaurante=restaurante)
+
+
+@app.route('/restaurante/<restaurant_id>', methods=['GET', 'POST'])
+@login_required
+def ver_restaurante(restaurant_id):
+    restaurante = db.restaurants.find_one({'_id': ObjectId(restaurant_id)})
+    if not restaurante:
+        flash('Restaurante não encontrado!', 'danger')
+        return redirect(url_for('restaurantes'))
+
+    avaliacoes = list(db.ratings.find({'restaurant_id': restaurante['_id']}))
+    if avaliacoes:
+        media = sum(av['rating'] for av in avaliacoes) / len(avaliacoes)
+        restaurante['media_avaliacoes'] = round(media, 1)
+        restaurante['total_avaliacoes'] = len(avaliacoes)
+    else:
+        restaurante['media_avaliacoes'] = 0
+        restaurante['total_avaliacoes'] = 0
+
+    for avaliacao in avaliacoes:
+        avaliacao['usuario'] = (db.users.find_one({'_id': ObjectId(avaliacao['user_id'])}))['name']
+
+    return render_template('ver_restaurante.html', restaurante=restaurante, avaliacoes=avaliacoes)
 
 
 if __name__ == '__main__':
